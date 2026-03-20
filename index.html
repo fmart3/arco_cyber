@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal ARCOP | CyberTrust</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b1120;
+            --card-bg: #1e293b;
+            --primary: #3b82f6;
+            --accent: #0ea5e9;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 0;
+            background: rgba(11, 17, 32, 0.95);
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+        }
+
+        .brand-badge {
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 50px;
+            animation: fadeIn 0.5s ease-out;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea {
+            width: 100%;
+            padding: 14px;
+            background: #0f172a;
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .radio-option {
+            background: #0f172a;
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .radio-option:hover {
+            border-color: var(--accent);
+        }
+
+        .radio-option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-option.selected {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .radio-label-title {
+            font-weight: 600;
+            color: white;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .radio-label-desc {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            display: block;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+        }
+
+        #detalle-solicitud {
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <span class="brand-badge">CyberTrust Security</span>
+        <h1>Gestión de Privacidad</h1>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Solicitud de Derechos ARCOP</h2>
+            <p class="subtitle">Complete el formulario para ejercer sus derechos de Acceso, Rectificación, Supresión,
+                Oposición o Portabilidad (Ley 21.719).</p>
+
+            <form id="arco-form">
+
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" name="email" placeholder="Ingrese su correo electrónico" required>
+                </div>
+
+                <label style="display: block; margin-bottom: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                    Seleccione el tipo de derecho que desea ejercer:
+                </label>
+
+                <div class="radio-group" id="radio-group-container">
+                    <label class="radio-option" onclick="selectRadio(this)">
+                        <input type="radio" name="tipo_derecho" value="Acceso">
+                        <span class="radio-label-title">Acceso</span>
+                        <span class="radio-label-desc">Solicitar información sobre cómo se están utilizando sus
+                            datos personales y obtener una copia de ellos.</span>
+                    </label>
+
+                    <label class="radio-option" onclick="selectRadio(this)">
+                        <input type="radio" name="tipo_derecho" value="Rectificación">
+                        <span class="radio-label-title">Rectificación</span>
+                        <span class="radio-label-desc">Solicitar la modificación de datos personales que sean
+                            inexactos, desactualizados o incompletos.</span>
+                    </label>
+
+                    <label class="radio-option" onclick="selectRadio(this)">
+                        <input type="radio" name="tipo_derecho" value="Supresión">
+                        <span class="radio-label-title">Supresión</span>
+                        <span class="radio-label-desc">Solicitar la eliminación de sus datos personales cuando ya no
+                            sean necesarios para los fines que fueron recabados.</span>
+                    </label>
+
+                    <label class="radio-option" onclick="selectRadio(this)">
+                        <input type="radio" name="tipo_derecho" value="Oposición">
+                        <span class="radio-label-title">Oposición</span>
+                        <span class="radio-label-desc">Solicitar que no se lleve a cabo el tratamiento de sus datos
+                            personales para fines específicos.</span>
+                    </label>
+
+                    <label class="radio-option" onclick="selectRadio(this)">
+                        <input type="radio" name="tipo_derecho" value="Portabilidad">
+                        <span class="radio-label-title">Portabilidad</span>
+                        <span class="radio-label-desc">Solicitar una copia de sus datos en un formato estructurado y
+                            transferirlos a otro proveedor de servicios.</span>
+                    </label>
+                </div>
+
+                <!-- Detalles de la solicitud -->
+                <div id="detalle-solicitud">
+                    <div class="form-group" style="margin-top: 15px; margin-bottom: 0;">
+                        <label>Describe en detalle tu solicitud</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" maxlength="500"
+                            placeholder="Escriba aquí los detalles de tu solicitud..."
+                            oninput="updateCharCount()"></textarea>
+                        <span class="char-counter" id="char-count">0 / 500 caracteres</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submit-btn" disabled
+                    style="opacity: 0.5; cursor: not-allowed; margin-top: 20px;">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('arco-form').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Evita que la página se recargue al hacer clic
+
+            const btn = document.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = "Enviando solicitud...";
+            btn.disabled = true;
+
+            // Recolectar datos. Buscamos los inputs por su atributo 'name'
+            const payload = {
+                email: document.querySelector('[name="email"]').value,
+                tipo_derecho: document.querySelector('[name="tipo_derecho"]').value,
+                mensaje: document.querySelector('[name="mensaje"]').value
+            };
+
+            // Si agregaste campos de Nombre o RUT en tu HTML, los capturamos aquí también
+            const rutInput = document.querySelector('[name="rut"]');
+            if (rutInput) payload.rut = rutInput.value;
+            const nombreInput = document.querySelector('[name="nombre"]');
+            if (nombreInput) payload.nombre = nombreInput.value;
+
+            try {
+                // El disparo directo a tu orquestador
+                const response = await fetch('https://pepelagos.app.n8n.cloud/webhook/arco-cybertrust', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    // Si n8n responde bien, vamos a la página de éxito pasando el email en la URL
+                    window.location.href = "success.html?email=" + encodeURIComponent(payload.email);
+                } else {
+                    alert("Error al enviar la solicitud. Por favor, intente de nuevo.");
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Falla de conexión. Revise su red e intente nuevamente.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
