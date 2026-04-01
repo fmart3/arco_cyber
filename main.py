@@ -1,15 +1,23 @@
+import os
 from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 import requests
+from dotenv import load_dotenv
+from datetime import datetime
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# URL de tu Webhook de n8n (Cópiala de tu nodo Webhook1)
-N8N_WEBHOOK_URL = "https://pepelagos.app.n8n.cloud/webhook/arco-cybertrust"
+# Cargar variables seguras
+N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
+N8N_AUTH_TOKEN = os.getenv("N8N_AUTH_TOKEN")
+N8N_AUTH_HEADER_NAME = os.getenv("N8N_AUTH_HEADER_NAME")
 
 @app.get("/")
 async def read_form(request: Request):
@@ -26,21 +34,25 @@ async def handle_form(
         "email": email,
         "tipo_derecho": tipo_derecho,
         "mensaje": mensaje,
-        "timestamp": "2026-03-09" # Dato útil para trazabilidad
+        "timestamp": datetime.now().isoformat() # Mejorado para enviar la fecha exacta actual
     }
     
-    # Enviar a n8n
+    # Inyectar el Header de Autenticación
+    headers = {
+        N8N_AUTH_HEADER_NAME: N8N_AUTH_TOKEN
+    }
+    
     try:
-        response = requests.post(N8N_WEBHOOK_URL, json=payload, timeout=10)
+        # Añadimos el parámetro headers a la petición
+        response = requests.post(N8N_WEBHOOK_URL, json=payload, headers=headers, timeout=10)
         
         # Si n8n responde con éxito
         if response.status_code == 200:
-            return templates.TemplateResponse("success.html", {
-                "request": request, 
-                "email": email
-            })
+            return templates.TemplateResponse("success.html", {"request": request, "email": email})
         else:
-            return f"Error en el motor de automatización: {response.status_code}"
-
-    except requests.exceptions.ConnectionError:
-        return "Error: No se pudo conectar con n8n. ¿Está encendido?"
+            # Captura errores de autenticación (ej. 401 Unauthorized o 403 Forbidden)
+            print(f"Error de n8n: {response.status_code} - {response.text}")
+            raise HTTPException(status_code=500, detail="Error de validación en el servidor de destino.")
+            
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"No se pudo conectar con el servidor: {str(e)}")
