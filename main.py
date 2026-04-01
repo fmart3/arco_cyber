@@ -23,7 +23,7 @@ N8N_AUTH_HEADER_NAME = os.getenv("N8N_AUTH_HEADER_NAME")
 
 @app.get("/")
 async def read_form(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request=request, name="index.html")
 
 @app.post("/enviar-arco")
 async def handle_form(
@@ -50,7 +50,7 @@ async def handle_form(
         
         # Si n8n responde con éxito
         if response.status_code == 200:
-            return templates.TemplateResponse("success.html", {"request": request, "email": email})
+            return templates.TemplateResponse(request=request, name="success.html", context={"email": email})
         else:
             # Captura errores de autenticación (ej. 401 Unauthorized o 403 Forbidden)
             print(f"Error de n8n: {response.status_code} - {response.text}")
