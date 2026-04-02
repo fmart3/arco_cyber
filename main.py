@@ -18,7 +18,7 @@ app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), na
 
 # Cargar variables seguras
 N8N_WEBHOOK_URL = os.getenv("N8N_WEBHOOK_URL")
-N8N_AUTH_TOKEN = os.getenv("N8N_AUTH_TOKEN")
+N8N_WEBHOOK_SECRET = os.getenv("N8N_WEBHOOK_SECRET")
 N8N_AUTH_HEADER_NAME = os.getenv("N8N_AUTH_HEADER_NAME")
 
 @app.get("/")
@@ -41,7 +41,8 @@ async def handle_form(
     
     # Inyectar el Header de Autenticación
     headers = {
-        N8N_AUTH_HEADER_NAME: N8N_AUTH_TOKEN
+        "Authorization": f"Bearer {N8N_WEBHOOK_SECRET}",
+        "Content-Type": "application/json"
     }
     
     try:
