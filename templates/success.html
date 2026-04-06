@@ -148,6 +148,13 @@
 
     <div class="container">
         <div class="card" style="text-align: center;">
+            {% if mensaje_especial %}
+            <div style="font-size: 4rem; color: var(--accent); margin-bottom: 20px;">✉️</div>
+            <h2>Autorización Requerida</h2>
+            <p style="color: var(--text-muted); font-size: 1.1rem; line-height: 1.5;">
+                {{ mensaje_especial }}
+            </p>
+            {% else %}
             <div style="font-size: 4rem; color: var(--success); margin-bottom: 20px;">✓</div>
             <h2>Solicitud Enviada</h2>
             <p style="color: var(--text-muted); font-size: 1.1rem;">
@@ -164,6 +171,7 @@
                     <li>Plazo máximo de respuesta: 15 días hábiles.</li>
                 </ul>
             </div>
+            {% endif %}
 
             <button onclick="location.href='/'" class="submit-btn" style="background: var(--border);">Volver al
                 Inicio</button>

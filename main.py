@@ -51,7 +51,23 @@ async def handle_form(
         
         # Si n8n responde con éxito
         if response.status_code == 200:
-            return templates.TemplateResponse(request=request, name="success.html", context={"email": email})
+            try:
+                data = response.json()
+            except ValueError:
+                data = {}
+            
+            # Si n8n dice que envió el correo de consentimiento
+            if data.get("status") == "consent_email_sent":
+                return templates.TemplateResponse(request=request, name="success.html", context={
+                    "email": email,
+                    "mensaje_especial": "Hemos pausado su solicitud. Le enviamos un correo para validar su autorización de privacidad. Una vez aceptado, vuelva a enviar este formulario."
+                })
+            else:
+                # El flujo normal
+                return templates.TemplateResponse(request=request, name="success.html", context={
+                    "email": email,
+                    "mensaje_especial": None
+                })
         else:
             # Captura errores de autenticación (ej. 401 Unauthorized o 403 Forbidden)
             print(f"Error de n8n: {response.status_code} - {response.text}")
